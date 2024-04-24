@@ -1,27 +1,17 @@
+#!groovy
 pipeline {
-    agent any
-
-    stages {
-        stage('Install Maven') {
-            steps {
-                script {
-                    def mvnHome = tool 'Maven'
-                    if (mvnHome == null) {
-                        echo 'Maven is not installed. Installing Maven...'
-                        def mvnVersion = '3.8.4' // Change this to the version you want to install
-                        def mvnUrl = "https://downloads.apache.org/maven/maven-3/${mvnVersion}/binaries/apache-maven-${mvnVersion}-bin.tar.gz"
-                        def mvnHome = tool name: 'Maven', type: 'maven', installMethod: 'COMMAND', 
-                                          properties: [[$class: 'InstallerLocation', 
-                                                        installSource: [
-                                                            [$class: 'CommandInstaller', 
-                                                             command: "curl -sSL ${mvnUrl} | tar xz"]]]]
-                        echo "Maven installed at ${mvnHome}"
-                    } else {
-                        echo "Maven is already installed at ${mvnHome}"
-                    }
-                }
-            }
-        }
+    agent none
+   stages {     
+    stage('Maven Install') {
+      agent {         
+       docker {          
+         image 'maven:3.8.8'         
+     }       
+  }       
+  steps {
+       sh 'mvn clean install'
+       }
+     }
         
         stage('Build & Unit test') {
             steps {
