@@ -1,18 +1,29 @@
-#!groovy
 pipeline {
-    agent none
-   stages {     
-    stage('Maven Install') {
-      agent {         
-       docker {          
-         image 'maven:3.8.8'         
-     }       
-  }       
-  steps {
-       sh 'mvn clean install'
-       }
-     }
-        
+    agent any
+
+    environment {
+        MAVEN_HOME = "${WORKSPACE}/apache-maven-3.8.8"
+        PATH = "${env.PATH}:${MAVEN_HOME}/bin"
+    }
+
+    stages {
+        stage('Maven Install') {
+            steps {
+                script {
+                    sh """
+                        if [ ! -d ${MAVEN_HOME} ]; then
+                            echo "Maven is not installed. Installing Maven..."
+                            curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o apache-maven.tar.gz
+                            tar -xzf apache-maven.tar.gz
+                            rm apache-maven.tar.gz
+                        else
+                            echo "Maven is already installed."
+                        fi
+                    """
+                }
+            }
+        }
+
         stage('Build & Unit test') {
             steps {
                 sh 'mvn clean package'
@@ -40,4 +51,3 @@ pipeline {
         }
     }
 }
-
