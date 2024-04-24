@@ -43,7 +43,7 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 echo "Deploying MyWebAppSecurity to Tomcat 11"
-                bat "copy target\\MyWebAppSecurity.war C:\\Program Files\\Apache Software Foundation\\Tomcat 11\\webapps\\MyWebAppSecurity.war"
+                bat "copy target\\MyWebAppSecurity.war \"C:\\Program Files\\Apache Software Foundation\\Tomcat 11\\webapps\\MyWebAppSecurity.war\""
             }
         }
 
