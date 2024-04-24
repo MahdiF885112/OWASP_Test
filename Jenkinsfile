@@ -1,25 +1,26 @@
 pipeline {
     agent any
 
-    environment {
-        MAVEN_HOME = "${WORKSPACE}/apache-maven-3.8.8"
-        PATH = "${env.PATH}:${MAVEN_HOME}/bin"
-    }
-
     stages {
         stage('Maven Install') {
             steps {
                 script {
-                    sh """
-                        if [ ! -d ${MAVEN_HOME} ]; then
-                            echo "Maven is not installed. Installing Maven..."
-                            curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o apache-maven.tar.gz
+                    def mvnHome = tool 'Maven'
+                    if (mvnHome == null) {
+                        echo 'Maven is not installed. Installing Maven...'
+                        def mavenUrl = 'https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz'
+                        sh """
+                            curl -fsSL ${mavenUrl} -o apache-maven.tar.gz
                             tar -xzf apache-maven.tar.gz
                             rm apache-maven.tar.gz
-                        else
-                            echo "Maven is already installed."
-                        fi
-                    """
+                            """
+                        withEnv(["PATH+MAVEN=${env.WORKSPACE}/apache-maven-3.8.8/bin"]) {
+                            mvnHome = tool 'Maven'
+                        }
+                        echo "Maven installed at ${mvnHome}"
+                    } else {
+                        echo "Maven is already installed at ${mvnHome}"
+                    }
                 }
             }
         }
