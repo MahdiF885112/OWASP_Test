@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     // Deploy to Tomcat
-                    bat 'copy target\\MyWebAppSecurity.war "C:\\Program Files (x86)\\Apache Software Foundation\\Tomcat 9.0\\webapps\\mywebapp.war"'
+                    bat 'copy target\\MyWebAppSecurity.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\webapps\\mywebapp.war"'
                 }
             }
         }
