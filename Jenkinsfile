@@ -39,8 +39,8 @@ pipeline {
         stage('Scan ZAP(Active Scan DAST)') {
             steps {
                 script {
-                    // Run ZAP Docker container for Active Scan with elevated privileges
-                    bat 'docker -H tcp://localhost:2375 run -t --privileged owasp/zap2docker-stable zap-baseline.py -t http://localhost:9090/mywebapp/ || exit 0'
+                    // Run ZAP Docker container for Active Scan 
+                    bat 'docker -H tcp://localhost:2375 run -t owasp/zap2docker-stable zap-baseline.py -t http://localhost:9090/mywebapp/ || exit 0'
                     
                 }
             }
