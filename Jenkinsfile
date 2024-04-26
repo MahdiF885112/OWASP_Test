@@ -27,14 +27,14 @@ pipeline {
             }
         }
 
-        stage('Deploy to Tomcat') {
+        /*stage('Deploy to Tomcat') {
             steps {
                 script {
                     // Deploy to Tomcat
                     bat 'copy target\\MyWebAppSecurity.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\webapps\\mywebapp.war"'
                 }
             }
-        }
+        }*/
 
         stage('Scan ZAP(Active Scan DAST)') {
             steps {
